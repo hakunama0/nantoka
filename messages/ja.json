@@ -1,0 +1,21 @@
+{
+  "nav": {
+    "apps": "Apps",
+    "notes": "Notes"
+  },
+  "home": {
+    "title": "アプリと記録",
+    "subtitle": "Apps & Development Notes",
+    "description": "作ったアプリと、開発中に考えたことの記録。設計から実装まで、丁寧に作ることを心がけています。",
+    "viewAllApps": "View All Apps",
+    "latestNotes": "Latest Notes"
+  },
+  "apps": {
+    "title": "Apps",
+    "description": "これまでに作ったアプリの一覧です。"
+  },
+  "notes": {
+    "title": "Notes",
+    "description": "開発中に考えたこと、学んだことの記録。"
+  }
+}

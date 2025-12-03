@@ -1,0 +1,26 @@
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--spacing-sm);
+  padding-right: var(--spacing-sm);
+}
+
+.sm {
+  max-width: 48rem; /* max-w-3xl approx */
+}
+
+.md {
+  max-width: 64rem; /* max-w-5xl approx */
+}
+
+.lg {
+  max-width: 80rem; /* max-w-7xl approx */
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding-left: var(--spacing-md);
+    padding-right: var(--spacing-md);
+  }
+}

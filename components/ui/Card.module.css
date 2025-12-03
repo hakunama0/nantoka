@@ -1,0 +1,95 @@
+.card {
+  display: block; /* Linkタグ(a要素)として振る舞うため */
+  text-decoration: none; /* リンクの下線を消す */
+  color: inherit; /* 文字色を継承 */
+  background: var(--color-paper);
+  border: var(--border-width) solid var(--color-line);
+  padding: var(--spacing-md);
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  border: var(--border-width) solid var(--color-line);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card:hover {
+  border-color: var(--color-line-dark);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transform: translateY(-4px);
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+/* Crosshair marker */
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.cardMarked::after {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: var(--spacing-md);
+  width: 12px;
+  height: 12px;
+  background:
+    linear-gradient(var(--color-line-dark), var(--color-line-dark)) center / 1px 100% no-repeat,
+    linear-gradient(var(--color-line-dark), var(--color-line-dark)) center / 100% 1px no-repeat;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text-title);
+}
+
+.description {
+  color: var(--color-text-body);
+  margin-bottom: var(--spacing-md);
+  flex-grow: 1;
+  overflow-wrap: break-word;
+}
+
+.date {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--spacing-sm);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.tag {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  padding: 0.2em 0.6em;
+  border: var(--border-width) solid var(--color-line);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
