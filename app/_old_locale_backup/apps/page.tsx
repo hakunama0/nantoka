@@ -18,8 +18,15 @@ export default async function AppsPage({ params }: { params: Promise<{ locale: s
           <h1 className={styles.title}>{t('title')}</h1>
           <p className={styles.description}>{t('description')}</p>
           <div className={styles.grid}>
-            {apps.map((app) => (
-              <Card key={app.id} item={app} type="app" marked locale={locale} />
+            {apps.map((app, idx) => (
+              <Card
+                key={app.id}
+                item={app}
+                type="app"
+                marked
+                locale={locale}
+                className={`animate-fade-in-up-delay-${(idx % 3) + 1}`} // delay-0, delay-1, delay-2, delay-0...
+              />
             ))}
           </div>
         </Container>

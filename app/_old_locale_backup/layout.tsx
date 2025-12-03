@@ -5,6 +5,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 import { locales } from '@/i18n/routing'; // locales は routing から取得
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
+import { ScrollRestoration } from '@/components/ScrollRestoration';
 import '../globals.css';
 
 const crimsonPro = Crimson_Pro({
@@ -44,6 +45,7 @@ export default async function LocaleLayout({
       <body className={`${crimsonPro.variable} ${ibmPlexMono.variable}`}>
         <NextIntlClientProvider messages={messages} locale={locale}>
           <ThemeProvider>
+            <ScrollRestoration />
             {children}
           </ThemeProvider>
         </NextIntlClientProvider>

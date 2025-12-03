@@ -20,13 +20,15 @@ export function Header() {
     else setTheme('light');
   };
 
-  const toggleLang = () => {
-    const newLocale = locale === 'ja' ? 'en' : 'ja';
-    router.replace(pathname, { locale: newLocale });
-  };
-
   const themeIconToDisplay = resolvedTheme === 'light' ? '☀' : '☾';
-  const langText = locale === 'ja' ? 'JA' : 'EN'; // 現在の言語を表示
+  const langText = locale === 'ja' ? 'JA' : 'EN';
+  const nextLocale = (locale === 'ja' ? 'en' : 'ja') as 'ja' | 'en';
+
+  const handleLangClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    sessionStorage.setItem('langToggleScroll', window.scrollY.toString());
+    router.push(pathname, { locale: nextLocale });
+  };
 
   return (
     <header className={styles.header}>
@@ -53,13 +55,15 @@ export function Header() {
           >
             {themeIconToDisplay}
           </button>
-          <button
-            onClick={toggleLang}
+          <Link
+            href={pathname}
+            locale={nextLocale}
+            onClick={handleLangClick}
             className={styles.langToggle}
             aria-label="Toggle language"
           >
             {langText}
-          </button>
+          </Link>
         </div>
       </div>
     </header>

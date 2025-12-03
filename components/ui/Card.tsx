@@ -10,13 +10,15 @@ interface CardProps {
 
   marked?: boolean;
 
-  locale: string; // Add locale prop
+  locale: string;
+
+  className?: string; // Add className prop
 
 }
 
 
 
-export function Card({ item, type, marked = false, locale }: CardProps) {
+export function Card({ item, type, marked = false, locale, className = '' }: CardProps) {
 
   const isApp = type === 'app';
 
@@ -27,11 +29,17 @@ export function Card({ item, type, marked = false, locale }: CardProps) {
   const title = isApp ? (item as App).name : (item as Note).title;
 
   const description = isApp ? (item as App).description : (item as Note).excerpt;
+
   const tags = 'tags' in item && item.tags ? item.tags : [];
+
   const date = 'date' in item ? item.date : null;
 
+
+
   return (
-    <Link href={href} locale={locale} className={`${styles.card} ${marked ? styles.cardMarked : ''}`}>
+
+    <Link href={href} locale={locale} className={`${styles.card} ${marked ? styles.cardMarked : ''} ${className}`}>
+
       <div className={styles.cardContent}>
         <h3 className={styles.title}>{title}</h3>
         <p className={styles.description}>{description}</p>

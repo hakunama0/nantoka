@@ -10,8 +10,9 @@
   --color-line-dark: #a3a3a3;
 
   /* Typography */
-  --font-serif: 'Crimson Pro', serif;
-  --font-mono: 'IBM Plex Mono', monospace;
+  --font-serif: var(--font-serif);
+  --font-mono: var(--font-mono);
+  --font-ja: var(--font-ja);
 
   /* Spacing */
   --spacing-xs: 0.5rem;
@@ -45,7 +46,7 @@
 }
 
 body {
-  font-family: var(--font-serif);
+  font-family: var(--font-ja), var(--font-serif);
   font-size: 18px;
   line-height: 1.7;
   color: var(--color-text);
