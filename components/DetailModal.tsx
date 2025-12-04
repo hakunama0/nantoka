@@ -3,22 +3,8 @@
 import { useEffect, useState } from 'react';
 import { SiReact, SiTypescript, SiTailwindcss, SiNextdotjs, SiNodedotjs, SiPython, SiJavascript, SiVuedotjs, SiAngular, SiSvelte, SiFigma, SiGit, SiDocker, SiPostgresql, SiMongodb, SiFirebase, SiSupabase, SiVercel, SiAmazon } from 'react-icons/si';
 import { IconType } from 'react-icons';
-import { useI18n } from '@/lib/i18n';
+import { useI18n, Entry } from '@/lib/i18n';
 import styles from './DetailModal.module.css';
-
-interface Entry {
-  date: string;
-  title: string;
-  description: string;
-  tech?: string;
-  readTime?: string;
-  link: string;
-  type: 'app' | 'note';
-  detailContent?: string;
-  image?: string;
-  demoUrl?: string;
-  githubUrl?: string;
-}
 
 interface DetailModalProps {
   entry: Entry | null;
