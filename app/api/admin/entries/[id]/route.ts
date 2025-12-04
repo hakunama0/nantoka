@@ -5,15 +5,16 @@ const WORKER_API_URL = process.env.NEXT_PUBLIC_REACTIONS_API_URL || 'http://loca
 // GET /api/admin/entries/:id - 単一コンテンツ取得
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const headers: HeadersInit = {};
     if (WORKER_API_URL.includes('localhost')) {
       headers['x-dev-bypass'] = 'local-development';
     }
 
-    const response = await fetch(`${WORKER_API_URL}/admin/entries/${params.id}`, { headers });
+    const response = await fetch(`${WORKER_API_URL}/admin/entries/${id}`, { headers });
     const data = await response.json();
 
     if (!response.ok) {
@@ -30,9 +31,10 @@ export async function GET(
 // PUT /api/admin/entries/:id - 更新
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
 
     const headers: HeadersInit = {
@@ -42,7 +44,7 @@ export async function PUT(
       headers['x-dev-bypass'] = 'local-development';
     }
 
-    const response = await fetch(`${WORKER_API_URL}/admin/entries/${params.id}`, {
+    const response = await fetch(`${WORKER_API_URL}/admin/entries/${id}`, {
       method: 'PUT',
       headers,
       body: JSON.stringify(body),
@@ -64,15 +66,16 @@ export async function PUT(
 // DELETE /api/admin/entries/:id - 削除
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const headers: HeadersInit = {};
     if (WORKER_API_URL.includes('localhost')) {
       headers['x-dev-bypass'] = 'local-development';
     }
 
-    const response = await fetch(`${WORKER_API_URL}/admin/entries/${params.id}`, {
+    const response = await fetch(`${WORKER_API_URL}/admin/entries/${id}`, {
       method: 'DELETE',
       headers,
     });
