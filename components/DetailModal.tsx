@@ -115,6 +115,14 @@ export function DetailModal({ entry, isOpen, onClose }: DetailModalProps) {
   const { t } = useI18n();
   const [isIconSpinning, setIsIconSpinning] = useState(false);
   const [showRealName, setShowRealName] = useState(false);
+  const [isRead, setIsRead] = useState(false);
+  const [reactions, setReactions] = useState<Record<string, number>>({
+    heart: 0,
+    party: 0,
+    thinking: 0,
+  });
+  const [selectedReaction, setSelectedReaction] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -129,6 +137,112 @@ export function DetailModal({ entry, isOpen, onClose }: DetailModalProps) {
     }
   }, [isOpen, onClose]);
 
+  // リアクション取得
+  useEffect(() => {
+    if (!entry || !isOpen) {
+      // モーダルが閉じたらstateをリセット
+      setSelectedReaction(null);
+      setReactions({
+        heart: 0,
+        party: 0,
+        thinking: 0,
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
+    const fetchReactions = async () => {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_REACTIONS_API_URL;
+        if (!apiUrl) return;
+
+        const entryId = entry.link;
+        const response = await fetch(`${apiUrl}/reactions/${entryId}`);
+
+        if (response.ok) {
+          const data = await response.json();
+          setReactions({
+            heart: data.heart || 0,
+            party: data.party || 0,
+            thinking: data.thinking || 0,
+          });
+        }
+
+        // localStorageから既にクリック済みのリアクションを取得
+        const reacted = localStorage.getItem(`reaction_${entryId}`);
+        if (reacted) {
+          setSelectedReaction(reacted);
+        } else {
+          setSelectedReaction(null);
+        }
+      } catch (error) {
+        console.error('Failed to fetch reactions:', error);
+      }
+    };
+
+    fetchReactions();
+  }, [entry, isOpen]);
+
+  // リアクション送信
+  const handleReactionClick = async (reactionType: string) => {
+    if (!entry || isSubmitting) return;
+
+    const entryId = entry.link;
+
+    // 同じボタンをもう一度押した場合は取り消し
+    if (selectedReaction === reactionType) {
+      localStorage.removeItem(`reaction_${entryId}`);
+      setSelectedReaction(null);
+      // カウントを1減らす（楽観的更新）
+      setReactions(prev => ({
+        ...prev,
+        [reactionType]: Math.max(0, prev[reactionType] - 1),
+      }));
+      return;
+    }
+
+    // 既に別のリアクション済みの場合は何もしない
+    if (selectedReaction) return;
+
+    // 送信中フラグを立てる
+    setIsSubmitting(true);
+
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_REACTIONS_API_URL;
+      if (!apiUrl) {
+        setIsSubmitting(false);
+        return;
+      }
+
+      const response = await fetch(`${apiUrl}/reactions`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          entry_id: entryId,
+          reaction_type: reactionType,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setReactions(prev => ({
+          ...prev,
+          [reactionType]: data.count,
+        }));
+
+        // localStorageに保存
+        localStorage.setItem(`reaction_${entryId}`, reactionType);
+        setSelectedReaction(reactionType);
+      }
+    } catch (error) {
+      console.error('Failed to submit reaction:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   if (!entry) return null;
 
   return (
@@ -138,7 +252,15 @@ export function DetailModal({ entry, isOpen, onClose }: DetailModalProps) {
       </button>
 
         <div className={styles.content}>
-          <time className={styles.date}>{entry.date}</time>
+          <div className={styles.metaBadges}>
+            <span className={styles.badge}>{entry.date}</span>
+            <span className={styles.badge}>{entry.type === 'app' ? 'App' : entry.type === 'note' ? 'Note' : 'About'}</span>
+            {entry.readTime && (
+              <span className={styles.badge}>
+                約{entry.readTime.replace(/約|分| min read/g, '').trim()}分で読めます
+              </span>
+            )}
+          </div>
 
           {entry.type === 'about' ? (
             <>
@@ -202,9 +324,57 @@ export function DetailModal({ entry, isOpen, onClose }: DetailModalProps) {
             </div>
           )}
 
-          {entry.readTime && (
-            <p className={styles.readTime}>{entry.readTime}</p>
-          )}
+          <div className={styles.readCheckbox}>
+            <label className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                checked={isRead}
+                onChange={(e) => setIsRead(e.target.checked)}
+                className={styles.checkbox}
+              />
+              <span className={styles.checkboxText}>読んだ！</span>
+            </label>
+          </div>
+
+          <div className={styles.reactionsSection}>
+            <h3 className={styles.sectionTitle}>この{entry.type === 'app' ? '作品' : '記事'}への反応</h3>
+            <div className={styles.reactions}>
+              <button
+                onClick={() => handleReactionClick('heart')}
+                disabled={isSubmitting || (selectedReaction !== null && selectedReaction !== 'heart')}
+                className={`${styles.reactionButton} ${selectedReaction === 'heart' ? styles.selected : ''}`}
+              >
+                <svg className={styles.reactionIcon} viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+                <span className={styles.reactionLabel}>参考になった</span>
+                <span className={styles.reactionCount}>{reactions.heart}</span>
+              </button>
+              <button
+                onClick={() => handleReactionClick('party')}
+                disabled={isSubmitting || (selectedReaction !== null && selectedReaction !== 'party')}
+                className={`${styles.reactionButton} ${selectedReaction === 'party' ? styles.selected : ''}`}
+              >
+                <svg className={styles.reactionIcon} viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12.35 22a10 10 0 01-10-10c0-5.52 4.48-10 10-10s10 4.48 10 10-4.48 10-10 10zm0-18c-4.41 0-8 3.59-8 8s3.59 8 8 8 8-3.59 8-8-3.59-8-8-8zm-2 12l-3-3 1.41-1.41L10.35 13l4.59-4.59L16.35 10l-6 6z"/>
+                  <path d="M7 6l1.5-4L10 3 8.5 7zm5-4l1.5 4L12 7l-1.5-4zm5 0l1.5 4-1.5 1L15 3z"/>
+                </svg>
+                <span className={styles.reactionLabel}>面白い</span>
+                <span className={styles.reactionCount}>{reactions.party}</span>
+              </button>
+              <button
+                onClick={() => handleReactionClick('thinking')}
+                disabled={isSubmitting || (selectedReaction !== null && selectedReaction !== 'thinking')}
+                className={`${styles.reactionButton} ${selectedReaction === 'thinking' ? styles.selected : ''}`}
+              >
+                <svg className={styles.reactionIcon} viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                </svg>
+                <span className={styles.reactionLabel}>もっと知りたい</span>
+                <span className={styles.reactionCount}>{reactions.thinking}</span>
+              </button>
+            </div>
+          </div>
 
           {(entry.githubUrl || entry.demoUrl) && (
             <div className={styles.actionsWrapper}>

@@ -61,7 +61,7 @@ const translations = {
 完璧じゃないけど、これでいい。なんとかなってる。`,
     },
     sectionLabels: {
-      latestUpdate: 'Latest update:',
+      latestUpdate: 'Last update:',
       usedTech: '使用技術',
     },
     heroTitle: 'なんとか',
@@ -93,7 +93,7 @@ const translations = {
     },
     entries: [
       {
-        date: '2024.12.04',
+        date: '2024.12.04 (水)',
         title: 'なんとかポートフォリオサイト',
         description: '「なんとかなる」って気持ちを形にしたかった。読みやすさと遊び心、どっちも諦めたくなくて、試行錯誤しながら作ったサイト。',
         detailContent: `正直、最初は何作ればいいかわからなかった。ポートフォリオって言っても、ありきたりなテンプレートは使いたくない。自分らしさって何だろう？って考えたら、「なんとかなる」っていう前向きな諦めの悪さが浮かんできた。
@@ -104,14 +104,16 @@ const translations = {
 
 完璧じゃないけど、これでいい。なんとかなってる。`,
         tech: 'Next.js / TypeScript / React',
+        readTime: '約5分',
         githubUrl: 'https://github.com/yourusername/nantoka',
-        link: '#',
+        link: 'nantoka-portfolio',
         type: 'app' as const,
       },
       {
-        date: '2024.12.04',
+        date: '2024.12.04 (水)',
         title: 'CSSだけでモーダル作ってみた話',
         description: 'JavaScriptゴリゴリ書かなくても、CSSだけで結構いい感じのモーダルができる。transitionとtransformの組み合わせだけ。',
+        readTime: '約3分',
         detailContent: `モーダルってJavaScriptで制御するもんだと思ってた。でも調べたら、CSSだけで十分だった。
 
 デスクトップは右から50%、モバイルは下から90vhでスライドイン。やってることは単純で、初期状態を画面外に置いて（translateX(100%)とかtranslateY(100%)）、開くときに0に戻すだけ。これだけでヌルッと動く。
@@ -120,7 +122,7 @@ const translations = {
 
 ReactのstateはisOpenのboolean一個だけ。あとは全部CSSに任せる。ロジックとスタイルを分けると、後で見返したときに「あ、これモーダルの開閉だけやってるんだな」ってすぐわかる。シンプルは正義。`,
         readTime: '8分',
-        link: '#',
+        link: 'css-modal',
         type: 'note' as const,
       },
       {
@@ -137,7 +139,7 @@ ReactのstateはisOpenのboolean一個だけ。あとは全部CSSに任せる。
 
 まあ、完璧じゃないけどね。でもこれでいいと思ってる。`,
         readTime: '10分',
-        link: '#',
+        link: 'floating-nav',
         type: 'note' as const,
       },
     ] as Entry[],
@@ -184,7 +186,7 @@ Design: readability first. Plenty of whitespace, wide line spacing. Mix serif an
 Not perfect, but good enough. Somehow, it works.`,
     },
     sectionLabels: {
-      latestUpdate: 'Latest update:',
+      latestUpdate: 'Last update:',
       usedTech: 'Tech Stack',
     },
     heroTitle: 'Somehow',
@@ -216,7 +218,7 @@ About the icon: This icon was created with a simple, approachable design in mind
     },
     entries: [
       {
-        date: '2024.12.04',
+        date: '2024.12.04 (Wed)',
         title: 'Nantoka Portfolio',
         description: 'Wanted to capture that "somehow it works" feeling. A site built through trial and error, refusing to compromise on either readability or playfulness.',
         detailContent: `Honestly, I had no idea what to build at first. A portfolio, sure, but I didn\'t want some cookie-cutter template. What even is "me"? Then it hit me - this stubborn optimism of "somehow it\'ll work out."
@@ -227,14 +229,16 @@ Tech-wise: Next.js and CSS Modules. Simple is best. Rather than loading up libra
 
 Not perfect, but good enough. Somehow, it works.`,
         tech: 'Next.js / TypeScript / React',
+        readTime: '5 min read',
         githubUrl: 'https://github.com/yourusername/nantoka',
-        link: '#',
+        link: 'nantoka-portfolio',
         type: 'app' as const,
       },
       {
-        date: '2024.12.04',
+        date: '2024.12.04 (Wed)',
         title: 'Building Modals with Just CSS',
         description: 'You don\'t need heavy JavaScript - CSS alone makes pretty nice modals. Just transition and transform.',
+        readTime: '3 min read',
         detailContent: `I used to think modals needed JavaScript control. Turns out, CSS is enough.
 
 Desktop: slides in 50% from the right. Mobile: 90vh from bottom. It\'s simple - start with elements off-screen (translateX(100%) or translateY(100%)), then return to 0 on open. That\'s it for the smooth motion.
@@ -243,7 +247,7 @@ For easing, I went with cubic-bezier(0.25, 0.1, 0.25, 1). Tried a bunch, this fe
 
 React state is just one boolean: isOpen. Everything else lives in CSS. Separating logic from style means later you can look at it and immediately go "ah, this just handles modal open/close." Simple is justice.`,
         readTime: '8 min',
-        link: '#',
+        link: 'css-modal',
         type: 'note' as const,
       },
       {
@@ -260,7 +264,7 @@ Also: changing button display based on current section, fading out with opacity 
 
 Not perfect, sure. But I think it\'s good enough.`,
         readTime: '10 min',
-        link: '#',
+        link: 'floating-nav',
         type: 'note' as const,
       },
     ] as Entry[],

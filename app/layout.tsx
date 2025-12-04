@@ -26,11 +26,17 @@ const zenMaruGothic = Zen_Maru_Gothic({
 export const metadata: Metadata = {
   title: 'Nantoka',
   description: 'Apps & Development Notes',
+  icons: {
+    icon: '/icon.svg',
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ja">
+      <head>
+        <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+      </head>
       <body className={`${crimsonPro.variable} ${ibmPlexMono.variable} ${zenMaruGothic.variable}`}>
         <ThemeProvider>
           <I18nProvider>

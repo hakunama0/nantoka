@@ -46,6 +46,26 @@
   max-width: 620px;
 }
 
+.metaBadges {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.badge {
+  padding: 4px 12px;
+  background: var(--color-line);
+  border-radius: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
 .date {
   font-family: var(--font-mono);
   font-size: 0.875rem;
@@ -203,11 +223,113 @@
   white-space: nowrap;
 }
 
+.readCheckbox {
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--color-line);
+  margin-bottom: var(--spacing-lg);
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  color: var(--color-text);
+  user-select: none;
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--color-accent);
+}
+
+.checkboxText {
+  transition: color 0.2s ease;
+}
+
+.checkboxLabel:has(.checkbox:checked) .checkboxText {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
 .readTime {
   font-family: var(--font-mono);
   font-size: 0.875rem;
   color: var(--color-text-secondary);
   margin-bottom: var(--spacing-lg);
+}
+
+.reactionsSection {
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--color-line);
+  margin-bottom: var(--spacing-lg);
+}
+
+.reactions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.reactionButton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: var(--color-line);
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font-serif);
+  flex: 1;
+  min-width: 120px;
+}
+
+.reactionButton:hover {
+  background: var(--color-line-dark);
+  transform: translateY(-2px);
+}
+
+.reactionButton.selected {
+  border-color: var(--color-accent);
+  background: rgba(251, 191, 36, 0.1);
+}
+
+.reactionButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.reactionButton:disabled:hover {
+  background: var(--color-line);
+  transform: none;
+}
+
+.reactionIcon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.reactionLabel {
+  font-size: 0.8125rem;
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+.reactionCount {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+  margin-left: auto;
+  font-weight: 600;
 }
 
 .actionsWrapper {
@@ -270,5 +392,9 @@
   .description {
     font-size: 1rem;
     line-height: 1.8;
+  }
+
+  .reactionButton {
+    min-width: 100%;
   }
 }

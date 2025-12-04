@@ -5,10 +5,12 @@ import { useI18n, Entry } from '@/lib/i18n';
 import { SimpleHeader } from '@/components/SimpleHeader';
 import { DetailModal } from '@/components/DetailModal';
 import { FloatingNav } from '@/components/FloatingNav';
+import { useTheme } from '@/components/providers/ThemeProvider';
 import styles from './page.module.css';
 
 export default function HomePage() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
+  const { resolvedTheme } = useTheme();
   const [selectedEntry, setSelectedEntry] = useState<Entry | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -42,14 +44,16 @@ export default function HomePage() {
         }}
       >
         <div className={styles.hero}>
-          <h1 className={styles.title}>
-            {t.heroTitle}
-            <span
-              className={styles.accent}
-              data-text={t.heroAccent}
-              data-hover={t.heroAccentHover}
-            ></span>
-          </h1>
+          <div className={styles.logoWrapper}>
+            <img
+              src={resolvedTheme === 'dark' ? '/nantoka-logo-dark.png' : '/nantoka-logo.png'}
+              alt="なんとかなる"
+              className={styles.logo}
+            />
+            {locale === 'en' && (
+              <p className={styles.logoCaption}>Somehow, it works!</p>
+            )}
+          </div>
           <p className={styles.subtitle}>{t.heroSubtitle}</p>
         </div>
 
@@ -95,24 +99,26 @@ export default function HomePage() {
                     </svg>
                   </a>
                 </div>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (selectedEntry?.type === 'about') {
-                      setSelectedEntry(null);
-                      setSelectedIndex(null);
-                    } else {
-                      setSelectedEntry(t.aboutEntry);
-                      setSelectedIndex(-1);
-                    }
-                  }}
-                  className={`${styles.openButton} ${selectedEntry?.type === 'about' ? styles.active : ''}`}
-                >
-                  {selectedEntry?.type === 'about' ? t.buttons.closeAbout : t.buttons.readAbout}
-                </button>
               </div>
             )}
             <p className={styles.description}>{t.aboutEntry.description}</p>
+            <div className={styles.aboutButtonWrapper}>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (selectedEntry?.type === 'about') {
+                    setSelectedEntry(null);
+                    setSelectedIndex(null);
+                  } else {
+                    setSelectedEntry(t.aboutEntry);
+                    setSelectedIndex(-1);
+                  }
+                }}
+                className={`${styles.openButton} ${selectedEntry?.type === 'about' ? styles.active : ''}`}
+              >
+                {selectedEntry?.type === 'about' ? t.buttons.closeAbout : t.buttons.readAbout}
+              </button>
+            </div>
           </article>
         </section>
 
@@ -165,10 +171,6 @@ export default function HomePage() {
 
               {entry.tech && (
                 <p className={styles.meta}>{entry.tech}</p>
-              )}
-
-              {entry.readTime && (
-                <p className={styles.meta}>{entry.readTime}</p>
               )}
             </article>
           ))}
@@ -224,15 +226,14 @@ export default function HomePage() {
               {entry.tech && (
                 <p className={styles.meta}>{entry.tech}</p>
               )}
-
-              {entry.readTime && (
-                <p className={styles.meta}>{entry.readTime}</p>
-              )}
             </article>
           ))}
           </section>
         </div>
       </main>
+      <footer className={styles.footer}>
+        <p className={styles.copyright}>© 2025 hakunama</p>
+      </footer>
       <DetailModal
         entry={selectedEntry}
         isOpen={!!selectedEntry}

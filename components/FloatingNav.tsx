@@ -207,10 +207,10 @@ export function FloatingNav({ isVisible = true }: FloatingNavProps) {
           <div className={styles.divider}></div>
           <button
             onClick={toggleTheme}
-            className={styles.menuItem}
+            className={`${styles.menuItem} ${styles.themeButton}`}
             aria-label="Toggle theme"
           >
-            {themeIconToDisplay}
+            <span className={styles.themeIcon}>{themeIconToDisplay}</span>
           </button>
           <button
             onClick={toggleLang}
