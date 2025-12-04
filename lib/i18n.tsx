@@ -113,7 +113,6 @@ const translations = {
         date: '2024.12.04 (水)',
         title: 'CSSだけでモーダル作ってみた話',
         description: 'JavaScriptゴリゴリ書かなくても、CSSだけで結構いい感じのモーダルができる。transitionとtransformの組み合わせだけ。',
-        readTime: '約3分',
         detailContent: `モーダルってJavaScriptで制御するもんだと思ってた。でも調べたら、CSSだけで十分だった。
 
 デスクトップは右から50%、モバイルは下から90vhでスライドイン。やってることは単純で、初期状態を画面外に置いて（translateX(100%)とかtranslateY(100%)）、開くときに0に戻すだけ。これだけでヌルッと動く。
@@ -238,7 +237,6 @@ Not perfect, but good enough. Somehow, it works.`,
         date: '2024.12.04 (Wed)',
         title: 'Building Modals with Just CSS',
         description: 'You don\'t need heavy JavaScript - CSS alone makes pretty nice modals. Just transition and transform.',
-        readTime: '3 min read',
         detailContent: `I used to think modals needed JavaScript control. Turns out, CSS is enough.
 
 Desktop: slides in 50% from the right. Mobile: 90vh from bottom. It\'s simple - start with elements off-screen (translateX(100%) or translateY(100%)), then return to 0 on open. That\'s it for the smooth motion.
