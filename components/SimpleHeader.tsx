@@ -1,16 +1,22 @@
 'use client';
 
+import React from 'react';
 import { useTheme } from '@/components/providers/ThemeProvider';
 import { useI18n } from '@/lib/i18n';
 import styles from './layout/Header.module.css';
 
 interface SimpleHeaderProps {
-  hideWhenDetailOpen?: boolean;
+  showWhenTop?: boolean;
 }
 
-export function SimpleHeader({ hideWhenDetailOpen = false }: SimpleHeaderProps = {}) {
+export function SimpleHeader({ showWhenTop = false }: SimpleHeaderProps = {}) {
   const { theme, setTheme, resolvedTheme } = useTheme();
   const { locale, setLocale, t } = useI18n();
+  const [isMounted, setIsMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const toggleTheme = () => {
     if (theme === 'light') setTheme('dark');
@@ -37,10 +43,10 @@ export function SimpleHeader({ hideWhenDetailOpen = false }: SimpleHeaderProps =
   };
 
   return (
-    <header className={`${styles.header} ${hideWhenDetailOpen ? styles.hiddenNav : ''}`}>
+    <header className={`${styles.header} ${showWhenTop ? styles.visible : ''} ${!isMounted ? styles.noTransition : ''}`}>
       <div className={styles.headerInner}>
         <div className={styles.navContainer}>
-          <button onClick={scrollToTop} className={styles.navItem}>
+          <button onClick={scrollToTop} className={`${styles.navItem} ${styles.nantokaNavItem}`}>
             Nantoka
           </button>
           <button onClick={() => scrollToSection('apps')} className={styles.navItem}>

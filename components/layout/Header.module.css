@@ -4,11 +4,18 @@
   z-index: 100;
   background: transparent;
   transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.header.hiddenNav {
   opacity: 0;
   pointer-events: none;
+}
+
+.header.noTransition,
+.header.noTransition * {
+  transition: none !important;
+}
+
+.header.visible {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .header.hiddenNav .navContainer {
@@ -27,7 +34,16 @@
 .navContainer {
   background: var(--color-paper);
   border: var(--border-width) solid var(--color-line);
-  border-radius: 24px;
+  clip-path: polygon(
+    12px 0,
+    calc(100% - 12px) 0,
+    100% 12px,
+    100% calc(100% - 12px),
+    calc(100% - 12px) 100%,
+    12px 100%,
+    0 calc(100% - 12px),
+    0 12px
+  );
   padding: var(--spacing-sm);
   display: flex;
   gap: 2px;
@@ -52,6 +68,40 @@
 .navItem:hover {
   background: var(--color-line);
   color: var(--color-text);
+}
+
+/* ナビゲーションバーの「Nantoka」ボタン用グラデーション */
+.nantokaHeaderItem {
+  position: relative;
+  overflow: hidden;
+
+  background-image: linear-gradient(to right, var(--color-line), var(--color-accent), var(--color-accent-hover), var(--color-line));
+  background-size: 300% auto;
+  background-position: 100% center;
+  color: var(--color-text-secondary);
+  transition: color 0.3s ease; /* ホバー解除時のカラー遷移は維持 */
+}
+
+.nantokaHeaderItem:hover {
+  background-position: 0% center;
+  color: var(--color-text);
+  transition: background-position 0.5s ease-out, color 0.3s ease; /* ホバー時のトランジション */
+}
+
+.nantokaNavItem {
+  position: relative;
+  overflow: hidden;
+
+  background-image: linear-gradient(to right, var(--color-line), var(--color-accent), var(--color-accent-hover), var(--color-line));
+  background-size: 300% auto;
+  background-position: 100% center;
+  color: #ffffff;
+  transition: background-position 0.3s ease;
+}
+
+.nantokaNavItem:hover {
+  background-position: 0% center;
+  transition: background-position 0.5s ease-out;
 }
 
 .divider {

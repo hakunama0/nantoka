@@ -6,10 +6,11 @@
   height: 100vh;
   background: var(--color-paper);
   transform: translateX(100%);
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
   overflow-y: auto;
   z-index: 100;
   pointer-events: none;
+  border-left: 1px solid rgba(251, 191, 36, 0.3);
 }
 
 .modal.open {
@@ -42,7 +43,7 @@
 
 .content {
   padding: 0 60px 80px;
-  max-width: 680px;
+  max-width: 620px;
 }
 
 .date {
@@ -58,9 +59,23 @@
   font-family: var(--font-serif);
   font-size: 2rem;
   font-weight: 600;
-  line-height: 1.4;
+  line-height: 1.5;
   color: var(--color-text);
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: calc(var(--spacing-lg) * 1.5);
+  letter-spacing: 0.01em;
+}
+
+.nameDot {
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  margin-left: 0.1em;
+  transition: color 0.2s ease, transform 0.2s ease;
+  display: inline-block;
+}
+
+.nameDot:hover {
+  color: var(--color-accent);
+  transform: scale(1.3);
 }
 
 .imageWrapper {
@@ -71,23 +86,75 @@
   background: var(--color-line);
 }
 
+.imageWrapper.profileImage {
+  width: 150px;
+  margin: 0 auto var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profileName {
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-top: var(--spacing-md);
+  text-align: center;
+  line-height: 1.5;
+}
+
 .image {
   width: 100%;
   height: auto;
   display: block;
 }
 
+.image.profileImage {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 8px solid #ffffff;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12), 0 6px 20px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.image.profileImage:hover {
+  transform: scale(1.05);
+}
+
+.image.profileImage.spinning {
+  animation: coinFlip 0.6s ease-in-out;
+}
+
+@keyframes coinFlip {
+  0% {
+    transform: rotateY(0deg) scale(1);
+  }
+  50% {
+    transform: rotateY(180deg) scale(1.1);
+  }
+  100% {
+    transform: rotateY(360deg) scale(1);
+  }
+}
+
 .description {
   font-family: var(--font-serif);
   font-size: 1.125rem;
-  line-height: 2;
+  line-height: 2.2;
   color: var(--color-text);
   white-space: pre-wrap;
   margin-bottom: var(--spacing-lg);
+  letter-spacing: 0.02em;
 }
 
 .techSection {
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: calc(var(--spacing-lg) * 1.5);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--color-line);
 }
 
 .sectionTitle {
@@ -95,8 +162,9 @@
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--color-text-secondary);
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
   letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .tech {
@@ -106,6 +174,35 @@
   line-height: 1.8;
 }
 
+.techList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.techItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.techIcon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: #ffffff;
+}
+
+.techName {
+  white-space: nowrap;
+}
+
 .readTime {
   font-family: var(--font-mono);
   font-size: 0.875rem;
@@ -113,23 +210,37 @@
   margin-bottom: var(--spacing-lg);
 }
 
+.actionsWrapper {
+  border: 1px solid var(--color-line-dark);
+  border-radius: 8px;
+  padding: 0.25rem;
+  display: inline-block;
+}
+
 .actions {
   display: flex;
-  gap: var(--spacing-md);
+  gap: 2px;
   flex-wrap: wrap;
 }
 
 .actionLink {
   font-family: var(--font-mono);
   font-size: 0.875rem;
-  color: var(--color-accent);
+  color: var(--color-text-secondary);
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   letter-spacing: 0.05em;
+  display: inline-block;
 }
 
 .actionLink:hover {
-  color: var(--color-accent-hover);
+  color: var(--color-text);
+  background: var(--color-line);
+  transform: translateY(-1px);
 }
 
 /* モバイル対応 */

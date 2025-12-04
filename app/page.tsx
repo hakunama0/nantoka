@@ -1,101 +1,165 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useI18n } from '@/lib/i18n';
+import { useI18n, Entry } from '@/lib/i18n';
 import { SimpleHeader } from '@/components/SimpleHeader';
 import { DetailModal } from '@/components/DetailModal';
 import { FloatingNav } from '@/components/FloatingNav';
 import styles from './page.module.css';
-
-interface Entry {
-  date: string;
-  title: string;
-  description: string;
-  tech?: string;
-  readTime?: string;
-  link: string;
-  type: 'app' | 'note';
-  detailContent?: string;
-  image?: string;
-  demoUrl?: string;
-  githubUrl?: string;
-}
 
 export default function HomePage() {
   const { t } = useI18n();
   const [selectedEntry, setSelectedEntry] = useState<Entry | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isIconSpinning, setIsIconSpinning] = useState(false);
+  const [showRealName, setShowRealName] = useState(false);
 
   useEffect(() => {
+    // Set initial state immediately on mount
+    setIsScrolled(window.scrollY > 0);
+
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 0);
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // TODO: 後でデータソースから取得
-  const entries: Entry[] = [
-    {
-      date: '2024.12.04',
-      title: 'デザインシステムビルダー',
-      description: '「統一感のあるUIを素早く作りたい」という課題から始まった。色の選択、余白の調整、タイポグラフィ。全てをシステム化することで、デザインの本質に集中できるようになった。',
-      detailContent: `デザインシステムの構築は、単なる見た目の統一ではない。それは思考の整理であり、意思決定の体系化だ。
-
-このプロジェクトは、毎回同じようなUIの選択で悩むことへの疲労から生まれた。ボタンの角丸は何pxが適切か。余白は16pxか24pxか。色は何色必要か。
-
-答えは、ルールを作ることだった。
-
-8の倍数で余白を定義し、色は意味を持つ最小限の数に絞り、タイポグラフィは階層を明確にする。これらの制約が、逆説的に創造性を解放した。
-
-実装にはReactとTailwind CSSを採用。コンポーネントの再利用性を最大化し、デザイントークンで一貫性を保証する。結果として、デザインの判断に費やす時間は劇的に減少し、本質的な問題解決に集中できるようになった。`,
-      tech: 'React / TypeScript / Tailwind CSS',
-      image: '/placeholder-design-system.jpg',
-      demoUrl: 'https://example.com/demo',
-      githubUrl: 'https://github.com/example/design-system',
-      link: '#',
-      type: 'app',
-    },
-    {
-      date: '2024.12.03',
-      title: 'ゼロから作るデザインシステム',
-      description: 'デザインシステムを構築する過程で学んだこと。コンポーネントの粒度、命名規則、ドキュメント化。理論だけでなく、実装の過程で直面した課題とその解決策。',
-      detailContent: `デザインシステムを一から構築する経験は、開発者として大きな学びだった。
-
-最初の課題は「粒度」だ。コンポーネントをどこまで細かく分割すべきか。Buttonは一つか、PrimaryButton、SecondaryButtonと分けるべきか。答えは「バリエーションではなく、責任で分ける」だった。
-
-次に直面したのは命名規則。技術的な名前（例：BlueButton）ではなく、意味を持つ名前（例：PrimaryButton）を採用した。これにより、色が変わってもコンポーネント名の変更は不要になる。
-
-そして最も重要だったのがドキュメント化。コンポーネントの使い方だけでなく、「なぜそのデザイン判断をしたのか」を記録した。これが、チーム全体での一貫性を保つ鍵となった。
-
-理論は美しいが、実践は泥臭い。レガシーコードとの共存、段階的な移行、チームメンバーへの教育。全てが課題だった。しかし、一つずつ解決していくことで、確実に品質は向上していった。`,
-      readTime: '12分で読む',
-      link: '#',
-      type: 'note',
-    },
-  ];
+  const entries = t.entries;
 
   return (
     <>
-      <SimpleHeader hideWhenDetailOpen={isScrolled || !!selectedEntry} />
+      <SimpleHeader showWhenTop={!isScrolled && !selectedEntry} />
       <main
         className={`${styles.main} ${selectedEntry ? styles.shifted : ''}`}
-        onClick={() => selectedEntry && setSelectedEntry(null)}
+        onClick={() => {
+          if (selectedEntry) {
+            setSelectedEntry(null);
+            setSelectedIndex(null);
+          }
+        }}
       >
         <div className={styles.hero}>
-          <h1 className={styles.title}>なんとか</h1>
-          <p className={styles.subtitle}>思考と制作の記録</p>
+          <h1 className={styles.title}>
+            {t.heroTitle}
+            <span
+              className={styles.accent}
+              data-text={t.heroAccent}
+              data-hover={t.heroAccentHover}
+            ></span>
+          </h1>
+          <p className={styles.subtitle}>{t.heroSubtitle}</p>
         </div>
 
-        <div className={styles.entries}>
-          {entries.map((entry, index) => (
-            <article key={index} className={styles.entry}>
-              <time className={styles.date}>{entry.date}</time>
-              <div className={styles.divider} />
+        <section className={styles.section}>
+          <div className={styles.sectionHeader}>
+            <div className={styles.sectionLeft}>
+              <span className={styles.sectionNumber}>00</span>
+              <h2 className={styles.sectionTitle}>{t.about.title}</h2>
+            </div>
+          </div>
 
-              <h2 className={styles.entryTitle}>{entry.title}</h2>
+          <article className={styles.entry}>
+            <div className={styles.divider} />
+
+            {t.aboutEntry.image && (
+              <div className={styles.aboutIconWrapper}>
+                <img
+                  src={t.aboutEntry.image}
+                  alt={t.aboutEntry.title}
+                  className={`${styles.aboutIcon} ${isIconSpinning ? styles.spinning : ''}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsIconSpinning(true);
+                  }}
+                  onAnimationEnd={() => setIsIconSpinning(false)}
+                />
+                <h2 className={styles.aboutName}>
+                  {showRealName ? 'Asano Yoshiaki' : t.aboutEntry.title}
+                  <span
+                    className={styles.nameDot}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowRealName(!showRealName);
+                    }}
+                  >
+                    .
+                  </span>
+                </h2>
+                <div className={styles.snsLinks}>
+                  <a href="https://x.com/E2wdP" target="_blank" rel="noopener noreferrer" className={styles.snsLink}>
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                  </a>
+                </div>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (selectedEntry?.type === 'about') {
+                      setSelectedEntry(null);
+                      setSelectedIndex(null);
+                    } else {
+                      setSelectedEntry(t.aboutEntry);
+                      setSelectedIndex(-1);
+                    }
+                  }}
+                  className={`${styles.openButton} ${selectedEntry?.type === 'about' ? styles.active : ''}`}
+                >
+                  {selectedEntry?.type === 'about' ? t.buttons.closeAbout : t.buttons.readAbout}
+                </button>
+              </div>
+            )}
+            <p className={styles.description}>{t.aboutEntry.description}</p>
+          </article>
+        </section>
+
+        <div className={styles.entries}>
+          <section id="apps" className={styles.section}>
+            <div className={styles.sectionHeader}>
+              <div className={styles.sectionLeft}>
+                <span className={styles.sectionNumber}>01</span>
+                <h2 className={styles.sectionTitle}>{t.nav.apps}</h2>
+              </div>
+              <div className={styles.sectionDate}>
+                <span className={styles.dateLabel}>{t.sectionLabels.latestUpdate}</span>
+                <time>{entries.filter(e => e.type === 'app')[0]?.date}</time>
+              </div>
+            </div>
+            {entries.filter(e => e.type === 'app').map((entry, index) => (
+              <article key={index} className={styles.entry}>
+                <div className={styles.divider} />
+
+              <div className={styles.titleRow}>
+                <h2 className={styles.entryTitle}>{entry.title}</h2>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (selectedIndex === index) {
+                      setSelectedEntry(null);
+                      setSelectedIndex(null);
+                    } else {
+                      setSelectedEntry(entry);
+                      setSelectedIndex(index);
+                    }
+                  }}
+                  className={`${styles.openButton} ${selectedIndex === index ? styles.active : ''}`}
+                >
+                  {selectedIndex === index
+                    ? entry.type === 'app'
+                      ? t.buttons.closeApp
+                      : entry.type === 'note'
+                      ? t.buttons.closeNote
+                      : t.buttons.closeAbout
+                    : entry.type === 'app'
+                    ? t.buttons.viewApp
+                    : entry.type === 'note'
+                    ? t.buttons.readNote
+                    : t.buttons.readAbout}
+                </button>
+              </div>
 
               <p className={styles.description}>{entry.description}</p>
 
@@ -106,34 +170,76 @@ export default function HomePage() {
               {entry.readTime && (
                 <p className={styles.meta}>{entry.readTime}</p>
               )}
-
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (selectedIndex === index) {
-                    setSelectedEntry(null);
-                    setSelectedIndex(null);
-                  } else {
-                    setSelectedEntry(entry);
-                    setSelectedIndex(index);
-                  }
-                }}
-                className={styles.link}
-              >
-                {selectedIndex === index
-                  ? '閉じる ×'
-                  : entry.type === 'app'
-                  ? '作品を見る →'
-                  : '記事を読む →'}
-              </button>
             </article>
           ))}
+          </section>
+
+          <section id="notes" className={styles.section}>
+            <div className={styles.sectionHeader}>
+              <div className={styles.sectionLeft}>
+                <span className={styles.sectionNumber}>02</span>
+                <h2 className={styles.sectionTitle}>{t.nav.notes}</h2>
+              </div>
+              <div className={styles.sectionDate}>
+                <span className={styles.dateLabel}>{t.sectionLabels.latestUpdate}</span>
+                <time>{entries.filter(e => e.type === 'note')[0]?.date}</time>
+              </div>
+            </div>
+            {entries.filter(e => e.type === 'note').map((entry, index) => (
+              <article key={index} className={styles.entry}>
+                <div className={styles.divider} />
+
+              <div className={styles.titleRow}>
+                <h2 className={styles.entryTitle}>{entry.title}</h2>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const actualIndex = entries.findIndex(e => e === entry);
+                    if (selectedIndex === actualIndex) {
+                      setSelectedEntry(null);
+                      setSelectedIndex(null);
+                    } else {
+                      setSelectedEntry(entry);
+                      setSelectedIndex(actualIndex);
+                    }
+                  }}
+                  className={`${styles.openButton} ${selectedIndex === entries.findIndex(e => e === entry) ? styles.active : ''}`}
+                >
+                  {selectedIndex === entries.findIndex(e => e === entry)
+                    ? entry.type === 'app'
+                      ? t.buttons.closeApp
+                      : entry.type === 'note'
+                      ? t.buttons.closeNote
+                      : t.buttons.closeAbout
+                    : entry.type === 'app'
+                    ? t.buttons.viewApp
+                    : entry.type === 'note'
+                    ? t.buttons.readNote
+                    : t.buttons.readAbout}
+                </button>
+              </div>
+
+              <p className={styles.description}>{entry.description}</p>
+
+              {entry.tech && (
+                <p className={styles.meta}>{entry.tech}</p>
+              )}
+
+              {entry.readTime && (
+                <p className={styles.meta}>{entry.readTime}</p>
+              )}
+            </article>
+          ))}
+          </section>
         </div>
       </main>
       <DetailModal
         entry={selectedEntry}
         isOpen={!!selectedEntry}
-        onClose={() => setSelectedEntry(null)}
+        onClose={() => {
+          setSelectedEntry(null);
+          setSelectedIndex(null);
+        }}
       />
       <FloatingNav />
     </>

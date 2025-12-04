@@ -33,9 +33,9 @@ export function Header() {
   return (
     <header className={styles.header}>
       <div className={styles.headerInner}>
-        <Link href="/" locale={locale} className={styles.logo}>
+        <button type="button" className={`${styles.navItem} ${styles.nantokaHeaderItem}`}>
           Nantoka
-        </Link>
+        </button>
 
         <nav className={styles.nav}>
           <Link href="/apps" locale={locale} className={styles.navLink}>
