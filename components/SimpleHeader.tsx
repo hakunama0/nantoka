@@ -3,7 +3,7 @@
 import React from 'react';
 import { useTheme } from '@/components/providers/ThemeProvider';
 import { useI18n } from '@/lib/i18n';
-import styles from './layout/Header.module.css';
+import styles from './SimpleHeader.module.css';
 
 interface SimpleHeaderProps {
   showWhenTop?: boolean;
